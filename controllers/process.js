@@ -7,7 +7,7 @@ const path     = require('path');
 exports.process = async(req, res, next) => {
     try {
 
-        let url =  req.params.url;
+        let url    =  req.params.url;
         let output = path.resolve(__dirname + '/../media/' , 'video.mp4');
 
         let video = ytdl('https://www.youtube.com/watch?v=' + url);
@@ -29,7 +29,7 @@ exports.process = async(req, res, next) => {
         });
         video.on('end', () => {
             process.stdout.write('\n\n');
-            return res.download(path.join(__dirname, 'video.mp4'));
+            return res.download(path.join(output));
         });
 
     } catch (e) {
