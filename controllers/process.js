@@ -14,6 +14,14 @@ exports.process = async(req, res, next) => {
 
         let starttime;
 
+        //Criando pasta caso não exista
+
+        let dir = path.resolve(__dirname + '/../media/' );
+        
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
+
         video.pipe(fs.createWriteStream(output));
         
         video.once('response', () => {
@@ -42,3 +50,4 @@ exports.process = async(req, res, next) => {
         });
     }
 }
+
