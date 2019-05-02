@@ -13,10 +13,13 @@ exports.process = async(req, res, next) => {
         let video = ytdl('https://www.youtube.com/watch?v=' + url);
 
         let starttime;
+
         video.pipe(fs.createWriteStream(output));
+        
         video.once('response', () => {
             starttime = Date.now();
         });
+
         video.on('progress', (chunkLength, downloaded, total) => {
             let percent = downloaded / total;
             let downloadedMinutes = (Date.now() - starttime) / 1000 / 60;
@@ -27,6 +30,7 @@ exports.process = async(req, res, next) => {
             process.stdout.write(`, estimated time left: ${(downloadedMinutes / percent - downloadedMinutes).toFixed(2)}minutes `);
             readline.moveCursor(process.stdout, 0, -1);
         });
+
         video.on('end', () => {
             process.stdout.write('\n\n');
             return res.download(path.join(output));
