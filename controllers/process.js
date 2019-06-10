@@ -3,14 +3,13 @@ const fs       = require('fs');
 const ytdl     = require('ytdl-core');
 const path     = require('path');
 
+class Process {
 
-exports.process = async(req, res, next) => {
-    try {
+    static download(url, response) {
 
-        let url    =  req.params.url;
         let output = path.resolve(__dirname + '/../media/' , 'video.mp4');
 
-        let video = ytdl('https://www.youtube.com/watch?v=' + url);
+        let video =  ytdl('https://www.youtube.com/watch?v=' + url);
 
         let starttime;
 
@@ -43,11 +42,7 @@ exports.process = async(req, res, next) => {
             process.stdout.write('\n\n');
             return res.download(path.join(output));
         });
-
-    } catch (e) {
-        res.status(500).send({
-            message: 'Falha ao processar sua requisição'
-        });
     }
 }
 
+module.exports = Process;

@@ -1,13 +1,27 @@
 const express = require('express');
+const indexRouter = new (require('./routes/index'));
 
-const indexRouter = require('./routes/index');
+class App {
+	constructor() {
+		this._express = express();
 
-const app = express();
+		this.initMiddlewares();
+		this.initRouters();
+		
+	}
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+	get express() {
+		return this._express;
+	}
 
-app.use('/', indexRouter);
+	initMiddlewares() {
+		this._express.use(express.json());
+		this._express.use(express.urlencoded({ extended: false }));
+	}
 
+	initRouters() {
+		this._express.use('/', indexRouter.getRouter());
+	}
+}
 
-module.exports = app;
+module.exports = new App().express;

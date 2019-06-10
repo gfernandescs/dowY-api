@@ -1,9 +1,28 @@
-const express = require('express');
-const router  = express.Router();
+const router = require('express').Router();
 
-const processController =  require('../controllers/process');
+const processController = require('../controllers/process');
 
+class IndexRoute {
+	constructor() {
+		this._router = router;
+	}
 
-router.get('/:url', processController.process);
+	getRouter() {
+		this._router.get('/:url', (req, res, next) => {
+			try{
+				
+				processController.download(req.params.url, res);
 
-module.exports = router;
+			} catch (e){
+				res.status(500).send({
+		            message: 'Falha ao processar sua requisição'
+		        });
+				next(e);
+			}
+		});
+
+		return this._router;
+	}
+}
+
+module.exports = IndexRoute;
